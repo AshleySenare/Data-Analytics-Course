@@ -1,0 +1,120 @@
+--CASESTUDY1
+--1
+--to check all the column names in my data
+-- to check the data types in my data
+SELECT*
+FROM casestudy1.item.coffee_store
+limit 10;
+
+
+--2
+-- i want to check my categorical columns
+SELECT distinct store_location
+FROM casestudy1.item.coffee_store;
+
+
+--3
+--
+SELECT MIN (transaction_date)AS first_operating_date
+FROM casestudy1.item.coffee_store;
+
+
+--4
+SELECT MAX(transaction_date)AS last_operating_date
+FROM casestudy1.item.coffee_store;
+
+--
+-- WHAT TIME THE SHOP OPENS AND CLOSES
+SELECT MIN(transaction_date)AS operating_hour
+FROM casestudy1.item.coffee_store;
+
+
+
+--5
+--calcu revenue by transaction date
+SELECT DAYNAME (transaction_date) AS day_name,
+
+     CASE
+     WHEN day_name IN ('Sun', 'Sat') THEN 'weekend'
+     else 'Weekday'
+     END AS day_classification,
+       MONTHNAME(transaction_date) AS month_name,
+       transaction_time
+       HOUR(transaction_time) AS hour_of_day
+FROM casestudy1.item.coffee_store;
+
+
+
+-- --ID'S
+-- COUNT (DISTINCT transaction_id) AS Number_of_Sales,
+
+
+-- --REVENUE CALCULATIONS
+-- SUM (transaction_qty* unit_price) AS Revenue
+
+-- GROUP BY ALL
+-- FROM casestudy1.item.coffee_store;
+
+---DROP TABLE IF EXISTS coffee_shop;
+
+--big line of code
+SELECT
+    transaction_date,
+    day_name,
+    day_classification,
+    month_name,
+    time_bucket,
+    hour_of_day,
+    product_category,
+    store_location,
+    product_detail,
+    product_type,
+    COUNT(DISTINCT transaction_id) AS number_of_sales,
+    SUM(qty * price) AS revenue
+FROM (
+    SELECT
+        transaction_id,
+        transaction_date,
+        transaction_time,
+        product_category,
+        store_location,
+        product_detail,
+        product_type,
+
+        -- Convert text with commas to numeric values
+        TO_DECIMAL(REPLACE(transaction_qty, ',', '')) AS qty,
+        TO_DECIMAL(REPLACE(unit_price, ',', '')) AS price,
+
+        -- Derived date & time columns
+        DAYNAME(transaction_date) AS day_name,
+        CASE
+            WHEN DAYNAME(transaction_date) IN ('Saturday', 'Sunday') THEN 'Weekend'
+            ELSE 'Weekday'
+        END AS day_classification,
+
+        MONTHNAME(transaction_date) AS month_name,
+
+        CASE
+            WHEN transaction_time BETWEEN '06:00:00' AND '11:59:59' THEN 'Morning'
+            WHEN transaction_time BETWEEN '12:00:00' AND '16:59:59' THEN 'Afternoon'
+            WHEN transaction_time BETWEEN '17:00:00' AND '23:59:59' THEN 'Evening'
+            ELSE 'Night'
+        END AS time_bucket,
+
+        DATE_PART(HOUR, transaction_time) AS hour_of_day
+    FROM casestudy1.item.coffee_store
+) AS t
+GROUP BY
+    transaction_date,
+    day_name,
+    day_classification,
+    month_name,
+    time_bucket,
+    hour_of_day,
+    product_category,
+    store_location,
+    product_detail,
+    product_type
+ORDER BY
+    transaction_date,
+    hour_of_day;

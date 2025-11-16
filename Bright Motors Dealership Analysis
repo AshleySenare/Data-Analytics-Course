@@ -1,0 +1,14 @@
+Bright Car Sales Data Analysis – Introduction
+
+This project explores the Bright Car Sales dataset, which contains detailed daily records of vehicle sales, pricing, and key vehicle attributes from Bright Motors. The purpose of this analysis is to transform raw transactional data into meaningful insights that can support strategic decision-making within the dealership.
+With the recent appointment of a new Head of Sales, Bright Motors aims to expand its dealership network, improve overall sales performance, and optimise inventory planning. As a Junior Data Analyst, this project focuses on uncovering trends in sales volume, revenue, pricing behaviour, and customer preferences using pivot tables, graphs, and visual analytics.
+
+The insights generated from this dataset help highlight:
+Yearly and monthly sales trends
+Best-selling makes and models
+Revenue contributions across brands
+Pricing and mileage patterns
+High-demand vehicle categories
+Opportunities for operational and sales improvement
+
+This repository includes the full analysis, visualisations, and summaries that can guide future marketing, stocking, and strategic decisions for Bright Motors.
